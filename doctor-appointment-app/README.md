@@ -1,61 +1,163 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Aplicación Laravel - Guía de Instalación y Desarrollo
+---
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## 1. Configuración del Sistema de Base de Datos (MySQL + DBeaver)
 
-## About Laravel
+### Pasos para establecer la conexión
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+1. **Instalar MySQL** y generar una nueva base de datos para la aplicación:
+   ```sql
+   CREATE DATABASE doctor_app;
+   ```
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+2. **Configurar DBeaver**: Establecer conexión con el servidor MySQL y confirmar la existencia de la base de datos `doctor_app`.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+3. **Configurar variables de entorno**: Modificar el archivo `.env` con los parámetros de conexión:
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=doctor_app
+   DB_USERNAME=nombre_usuario
+   DB_PASSWORD=clave_acceso
+   ```
 
-## Learning Laravel
+4. **Validar la conexión**: Ejecutar las migraciones para verificar el funcionamiento:
+   ```bash
+   php artisan migrate
+   ```
+   > Una ejecución exitosa confirma que la conexión está operativa.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 2. Desarrollo de Layout Personalizado
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Creación del diseño base
 
-## Laravel Sponsors
+1. **Generar archivo de plantilla** en la siguiente ubicación:
+   ```
+   resources/views/layouts/app.blade.php
+   ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+2. **Implementar estructura fundamental**:
+   ```blade
+   <!DOCTYPE html>
+   <html lang="es">
+   <head>
+       <meta charset="UTF-8">
+       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <title>{{ $title ?? 'Doctor App' }}</title>
+       @vite('resources/css/app.css')
+       @vite('resources/js/app.js')
+   </head>
+   <body class="bg-gray-100">
+       <!-- Encabezado -->
+       @include('partials.header')
+       
+       <!-- Área de contenido principal -->
+       <main class="container mx-auto p-6">
+           {{ $slot }}
+       </main>
+       
+       <!-- Pie de página -->
+       @include('partials.footer')
+   </body>
+   </html>
+   ```
 
-### Premium Partners
+3. **Organizar componentes**: Establecer la carpeta `partials` e incluir elementos como `header.blade.php` y `footer.blade.php`.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+---
 
-## Contributing
+## 3. Incorporación de Flowbite
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Proceso de integración
 
-## Code of Conduct
+1. **Configurar TailwindCSS** (si no está instalado previamente):
+   ```bash
+   npm install -D tailwindcss postcss autoprefixer
+   npx tailwindcss init -p
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+2. **Ajustar configuración** en el archivo `tailwind.config.js`:
+   ```js
+   export default {
+     content: [
+       "./resources/**/*.blade.php",
+       "./resources/**/*.js",
+       "./resources/**/*.vue",
+       "./node_modules/flowbite/**/*.js"
+     ],
+     theme: {
+       extend: {},
+     },
+     plugins: [
+       require('flowbite/plugin')
+     ],
+   }
+   ```
 
-## Security Vulnerabilities
+3. **Añadir Flowbite** al proyecto:
+   ```bash
+   npm install flowbite
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+4. **Incorporar en JavaScript**: Modificar el archivo `app.js`:
+   ```js
+   import 'flowbite';
+   ```
 
-## License
+5. **Compilar recursos**:
+   ```bash
+   npm run dev
+   ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## 4. Implementación de Slots e Includes
+
+### Ejemplos prácticos
+
+**Componente reutilizable con slot**  
+Ubicación: `resources/views/components/card.blade.php`
+```blade
+<div class="p-6 bg-white rounded-lg shadow-md">
+    <h2 class="text-lg font-bold">{{ $title }}</h2>
+    <div>
+        {{ $slot }}
+    </div>
+</div>
+```
+
+**Implementación en vista**:
+```blade
+<x-card title="Página de Inicio">
+    <p>Contenido dinámico insertado mediante slot.</p>
+</x-card>
+```
+
+**Utilización de includes**:
+```blade
+@include('partials.header')
+```
+
+> La correcta visualización indica que los sistemas de `slots` e `includes` están operativos.
+
+---
+
+## Lista de Verificación del Sistema
+
+- [x] Conectividad MySQL validada mediante DBeaver
+- [x] Plantilla principal establecida en `resources/views/layouts/app.blade.php`
+- [x] Flowbite correctamente integrado con Tailwind y NPM
+- [x] Funcionalidad de Slots e Includes verificada
+
+---
+
+## Comandos Esenciales
+
+```bash
+php artisan serve       # Iniciar servidor de desarrollo
+php artisan migrate     # Aplicar migraciones de base de datos
+npm run dev             # Compilar recursos (Tailwind + Flowbite)
+```
