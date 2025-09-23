@@ -6,6 +6,7 @@
 @source "../../node_modules/flowbite";
 
 
+
 [x-cloak] {
     display: none;
 }

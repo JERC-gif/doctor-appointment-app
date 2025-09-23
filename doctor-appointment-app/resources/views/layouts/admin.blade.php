@@ -13,13 +13,14 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <script src="https://kit.fontawesome.com/a7de8752fc.js" crossorigin="anonymous"></script>
 
         <!-- Styles -->
         @livewireStyles
     </head>
     <body class="font-sans antialiased bg-gray-50">
-
         @include('layouts.includes.admin.navigation')
+
         @include('layouts.includes.admin.sidebar')
 
         <div class="p-4 sm:ml-64">
@@ -27,10 +28,10 @@
             <div class="mt-14">
                 {{ $slot }}
             </div>
+        </div>
+
         @stack('modals')
+        <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
 
         @livewireScripts
-
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
     </body>
-</html>

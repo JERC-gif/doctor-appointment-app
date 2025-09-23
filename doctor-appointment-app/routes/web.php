@@ -2,17 +2,16 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/admin');
-// Route::get('/', function () {
-//    return view('welcome');
-//});
+Route::redirect('/', '/admin'); // Redirige al admin por defecto
 
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
-])->group(function () {
+])->prefix('admin')->name('admin.')->group(function () {
+
+    // Dashboard de administrador
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        return view('admin.dashboard'); // vista en resources/views/admin/dashboard.blade.php
     })->name('dashboard');
 });
