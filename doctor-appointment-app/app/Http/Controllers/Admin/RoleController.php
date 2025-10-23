@@ -12,7 +12,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.roles.index');
     }
 
     /**
@@ -20,7 +20,8 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //
+        //no se
+        return view('admin.roles.create');
     }
 
     /**

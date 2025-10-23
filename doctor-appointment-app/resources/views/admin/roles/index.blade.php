@@ -1,13 +1,11 @@
-<x-admin-layaut
-    title="Roles | Simify" :breadcrumb="[
+<x-admin-layout title="Roles | MediLink" :breadcrumbs="[
     [
-        'name' =>route('admin.dashboard'),
-        'route' => route('admin.dashboard'),
-        ],
-        [
-            'name' => 'Roles',
-],
-    ]">
-
-</x-admin-layaut>
-
+        'name' => 'Dashboard',
+        'url' => route('admin.dashboard')
+    ],
+    [
+        'name' => 'Roles'
+    ],
+]">
+    @livewire('admin.datatables.role-table')
+</x-admin-layout>
