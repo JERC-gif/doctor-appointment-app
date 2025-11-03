@@ -1,10 +1,17 @@
-<x-admin-layout title="Roles | MediLink" :breadcrumb="[
-    [
-        'name' => 'Dashboard',
-        'url' => route('admin.dashboard')
-    ],
-    [
-        'name' => 'Roles'
-    ],
-]">
+<x-admin-layout
+    title="Roles | simify"
+    :breadcrumbs="[
+        [
+            'name' => 'Dashboard',
+            'href' => route ('admin.dashboard'),
+        ],
+
+        [
+            'name' => 'Roles',
+            'href' => route ('admin.admin.roles.index')
+        ],
+        [
+            'name' => 'Nuevo'
+        ]
+    ]">
 </x-admin-layout>

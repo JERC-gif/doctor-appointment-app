@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Role;
 
 class RoleController extends Controller
 {
@@ -12,7 +13,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        return view('admin.roles.index');
+      return view('admin.roles.index');  //
     }
 
     /**
@@ -20,7 +21,6 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //no se
         return view('admin.roles.create');
     }
 
@@ -45,7 +45,8 @@ class RoleController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $role = Role::findOrFail($id);
+        return view('admin.roles.edit', compact('role'));
     }
 
     /**
@@ -53,7 +54,14 @@ class RoleController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $role = Role::findOrFail($id);
+        $role->update($request->only('name'));
+
+        return redirect()->route('admin.roles.index')->with('success', 'Rol actualizado correctamente.');
     }
 
     /**
