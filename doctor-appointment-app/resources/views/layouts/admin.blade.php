@@ -50,7 +50,16 @@
 
 @livewireScripts
 
+{{-- Importacion --}}
 <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+{{-- Mostrar mensajes de SweetAlert2 --}}
+@if (session('swal'))
+    <script>
+        Swal.fire(@json(session('swal')));
+    </script> 
+@endif
 
 
 

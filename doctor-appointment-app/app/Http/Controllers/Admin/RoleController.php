@@ -29,7 +29,23 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255|unique:roles,name',
+        ]);
+
+        Role::create([
+            'name' => $request->name,
+            'guard_name' => 'web'
+        ]);
+
+        //Variable de un solo uso para alerta
+        session()->flash('swal', [
+            'icon' => 'success',
+            'title' => 'Rol creado correctamente',
+            'text' => 'El rol ha sido creado exitosamente'
+        ]);
+
+        return redirect()->route('admin.roles.index');
     }
 
     /**
@@ -61,11 +77,19 @@ class RoleController extends Controller
         $role = Role::findOrFail($id);
         $role->update($request->only('name'));
 
-        return redirect()->route('admin.roles.index')->with('success', 'Rol actualizado correctamente.');
+        //Variable de un solo uso para alerta
+        session()->flash('swal', [
+            'icon' => 'success',
+            'title' => 'Rol actualizado correctamente',
+            'text' => 'El rol ha sido actualizado exitosamente'
+        ]);
+
+        return redirect()->route('admin.roles.index');
     }
 
     /**
      * Remove the specified resource from storage.
+     *
      */
     public function destroy(string $id)
     {
