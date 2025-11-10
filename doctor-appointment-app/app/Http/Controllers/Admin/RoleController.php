@@ -70,20 +70,47 @@ class RoleController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        // Buscar el rol
+        $role = Role::findOrFail($id);
+
+        // Restricción: No permitir actualizar los primeros 4 roles base del sistema
+        if ($role->id <= 4) {
+            session()->flash('swal', [
+                'icon' => 'error',
+                'title' => 'Acción no permitida',
+                'text' => 'No se puede actualizar un rol base del sistema.'
+            ]);
+
+            return redirect()->route('admin.roles.index');
+        }
+
+        // Validar campos
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:roles,name,' . $role->id,
         ]);
 
-        $role = Role::findOrFail($id);
+        // Si el campo no cambió, no actualices
+        if ($role->name === $request->name) {
+            session()->flash('swal', [
+                'icon' => 'info',
+                'title' => 'Sin cambios',
+                'text' => 'No se detectaron modificaciones.'
+            ]);
+
+            return redirect()->route('admin.roles.edit', $role);
+        }
+
+        // Actualizar el rol
         $role->update($request->only('name'));
 
-        //Variable de un solo uso para alerta
+        // Variable de un solo uso para alerta de éxito
         session()->flash('swal', [
             'icon' => 'success',
             'title' => 'Rol actualizado correctamente',
             'text' => 'El rol ha sido actualizado exitosamente'
         ]);
 
+        // Redireccionar al índice
         return redirect()->route('admin.roles.index');
     }
 
@@ -91,8 +118,28 @@ class RoleController extends Controller
      * Remove the specified resource from storage.
      *
      */
-    public function destroy(string $id)
+    public function destroy(Role $role)
     {
-        //
+        //Restringir la acción para los primeros 4 roles fijos
+        if ($role->id <= 4) {
+            //Variable de un solo uso
+            session()->flash('swal', [
+                'icon' => 'error',
+                'title' => 'Error',
+                'text' => 'No puedes eliminar este rol.'
+            ]);
+
+            return redirect()->route('admin.roles.index');
+        }
+
+        $role->delete();
+
+        session()->flash('swal', [
+            'icon' => 'success',
+            'title' => 'Rol eliminado correctamente',
+            'text' => 'El rol ha sido eliminado exitosamente'
+        ]);
+
+        return redirect()->route('admin.roles.index');
     }
 }

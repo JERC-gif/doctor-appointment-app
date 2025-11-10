@@ -61,6 +61,36 @@
     </script> 
 @endif
 
+{{-- Script para confirmación de eliminación con delete-form --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        forms = document.querySelectorAll('.delete-form');
+        forms.forEach(form => {
+            //Activa el modo chismoso
+            form.addEventListener('submit', function(e) {
+                //Evita que se envíe
+                e.preventDefault();
+                
+                Swal.fire({
+                    title: "¿Estás seguro",
+                    text: "No podrás revertir esto",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Sí, eliminar",
+                    cancelButtonText: "Cancelar"
+                }).then((result) => {
+                    //Borrar el registro
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    });
+</script>
+
 
 
 
