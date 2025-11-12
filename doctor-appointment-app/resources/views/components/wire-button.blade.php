@@ -1,15 +1,11 @@
-@props([
-  'type' => 'button',
-])
+@props(['type' => 'button', 'blue' => false])
 
-<button
-  type="{{ $type }}"
-  {{ $attributes->merge([
-    'class' => 'inline-flex items-center gap-2 rounded-lg px-4 py-2
-                bg-indigo-600 text-white hover:bg-indigo-700
-                disabled:opacity-50 disabled:cursor-not-allowed transition'
-  ]) }}
->
-  {{ $slot }}
+@php
+    $base = 'inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm focus:outline-none';
+    $color = $blue ? 'text-white bg-indigo-600 hover:bg-indigo-700' : 'text-gray-700 bg-gray-100 hover:bg-gray-200';
+@endphp
+
+<button type="{{ $type }}" {{ $attributes->merge(['class' => "$base $color"]) }}>
+    {{ $slot }}
 </button>
 

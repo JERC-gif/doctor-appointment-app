@@ -19,10 +19,19 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // User::factory(10)->create();
-        User::factory()->create([
+        User::create([
             'name' => 'Jorge Ruiz',
             'email' => 'jorgeprueba@gmail.com',
-            'password' => bcrypt('jorge1234')
+            'password' => 'jorge1234', // El modelo tiene 'hashed' cast, así que se hashea automáticamente
+            'email_verified_at' => now(),
+        ]);
+
+        // Crear usuario admin adicional
+        User::create([
+            'name' => 'Admin',
+            'email' => 'admin@healthify.com',
+            'password' => 'admin1234',
+            'email_verified_at' => now(),
         ]);
     }
 };
