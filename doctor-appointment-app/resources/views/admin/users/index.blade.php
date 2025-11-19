@@ -12,11 +12,11 @@
     <x-slot name="action">
         <x-wire-button blue href="{{ route('admin.users.create') }}">
             <i class="fa-solid fa-user-plus"></i>
-            Nuevo Usuario
+            + Nuevo
         </x-wire-button>
     </x-slot>
 
-    {{-- Contenido en blanco por ahora --}}
+    @livewire('admin.datatables.user-table')
 
 </x-admin-layout>
 

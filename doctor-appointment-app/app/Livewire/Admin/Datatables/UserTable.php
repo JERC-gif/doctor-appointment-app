@@ -26,30 +26,35 @@ class UserTable extends DataTableComponent
 
     public function builder(): Builder
     {
-        return User::query()->with('role');
+        return User::query()
+            ->leftJoin('roles', 'users.role_id', '=', 'roles.id')
+            ->select('users.*', 'roles.name as role_name');
     }
 
     public function columns(): array
     {
         return [
-            Column::make("ID", "id")
+            Column::make("NAME", "name")
                 ->sortable()
                 ->searchable(),
-            Column::make("NOMBRE", "name")
+            Column::make("EMAIL", "email")
                 ->sortable()
                 ->searchable(),
-            Column::make("CORREO", "email")
+            Column::make("NÚMERO DE ID", "id_number")
                 ->sortable()
                 ->searchable(),
-            Column::make("ROL")
+            Column::make("TELÉFONO", "phone")
+                ->sortable()
+                ->searchable(),
+            Column::make("ROL", "role_name")
                 ->label(function($row) {
-                    return $row->role ? $row->role->name : 'Sin rol';
+                    return $row->role_name ?? 'Sin rol';
                 }),
             Column::make("ACCIONES")
-                ->label(function($row){
-                    return view('admin.users.actions',
-                    ['user' => $row]);
+                ->label(function($row) {
+                    return view('admin.users.actions', ['user' => $row, 'userId' => $row->id])->render();
                 })
+                ->html()
                 ->unclickable()
         ];
     }

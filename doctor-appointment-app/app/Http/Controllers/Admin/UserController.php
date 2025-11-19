@@ -40,20 +40,17 @@ class UserController extends Controller
                          ->with('success', 'Usuario creado correctamente.');
     }
 
-    public function edit(string $id)
+    public function edit(User $user)
     {
-        $user = User::findOrFail($id);
         $roles = Role::all();
         return view('admin.users.edit', compact('user', 'roles'));
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $user)
     {
-        $user = User::findOrFail($id);
-
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => "required|email|unique:users,email,$id",
+            'email' => "required|email|unique:users,email,{$user->id}",
             'role_id' => 'nullable|exists:roles,id',
         ]);
 
@@ -63,9 +60,8 @@ class UserController extends Controller
                          ->with('success', 'Usuario actualizado correctamente.');
     }
 
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
-        $user = User::findOrFail($id);
         $user->delete();
 
         return redirect()->route('admin.users.index')
