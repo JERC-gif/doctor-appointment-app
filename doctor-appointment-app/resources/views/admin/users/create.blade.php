@@ -12,7 +12,6 @@
         'name' => 'Nuevo',
     ]
 ]">
-
 <x-wire-card>
     <form action="{{ route('admin.users.store')}}" method="POST">
 
@@ -76,5 +75,5 @@
         </div>
     </form>
 </x-wire-card>
-
 </x-admin-layout>
+
