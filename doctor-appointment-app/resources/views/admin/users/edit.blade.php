@@ -17,24 +17,65 @@
             @csrf
             @method('PUT')
 
-            <x-wire-input
-                label="Nombre"
-                name="name"
-                placeholder="Nombre del usuario"
-                value="{{old('name', $user->name)}}">
-            </x-wire-input>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <x-wire-input
+                    label="Nombre"
+                    name="name"
+                    placeholder="Nombre del usuario"
+                    value="{{old('name', $user->name)}}">
+                </x-wire-input>
+
+                <x-wire-input
+                    label="Email"
+                    name="email"
+                    type="email"
+                    placeholder="correo@ejemplo.com"
+                    value="{{old('email', $user->email)}}">
+                </x-wire-input>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <x-wire-input
+                    label="Contraseña"
+                    name="password"
+                    type="password"
+                    placeholder="Mínimo 8 caracteres">
+                </x-wire-input>
+
+                <x-wire-input
+                    label="Confirmar contraseña"
+                    name="password_confirmation"
+                    type="password"
+                    placeholder="Repita la contraseña">
+                </x-wire-input>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <x-wire-input
+                    label="Número de ID"
+                    name="id_number"
+                    placeholder="Número de identificación"
+                    value="{{old('id_number', $user->id_number)}}">
+                </x-wire-input>
+
+                <x-wire-input
+                    label="Teléfono"
+                    name="phone"
+                    placeholder="Número de teléfono"
+                    value="{{old('phone', $user->phone)}}">
+                </x-wire-input>
+            </div>
 
             <x-wire-input
-                label="Correo"
-                name="email"
-                type="email"
-                placeholder="correo@ejemplo.com"
-                value="{{old('email', $user->email)}}">
+                label="Dirección"
+                name="address"
+                placeholder="Dirección completa"
+                value="{{old('address', $user->address)}}">
             </x-wire-input>
 
             <div class="mb-4">
                 <label for="role_id" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
-                    Rol (opcional)
+                    Rol
                 </label>
                 <select
                     id="role_id"
@@ -52,6 +93,7 @@
                 @error('role_id')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Define los permisos y accesos del usuario</p>
             </div>
 
             <div class="flex justify-end mt-4">

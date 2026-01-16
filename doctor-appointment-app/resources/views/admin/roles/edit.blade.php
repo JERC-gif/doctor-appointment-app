@@ -1,5 +1,5 @@
 <x-admin-layout
-    title="Roles | HouseMD"
+    title="Roles | Meditime"
     :breadcrumbs="[
         ['name' => 'Dashboard', 'href' => route('admin.dashboard')],
         ['name' => 'Roles',     'href' => route('admin.roles.index')],
