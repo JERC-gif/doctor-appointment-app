@@ -92,7 +92,16 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
+        //Eliminar roles asociados a un usuario
+        $user->roles()->detach();
+        //Eliminar el Usuario
         $user->delete();
+
+        session()->flash('swal', [
+            'icon' => 'success',
+            'title' => 'Usuario Eliminado',
+            'text' => 'El usuario ha sido eliminado exitosamente.'
+        ]);
 
         return redirect()->route('admin.users.index')
                          ->with('success', 'Usuario eliminado correctamente.');

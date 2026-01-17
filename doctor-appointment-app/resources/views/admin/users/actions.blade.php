@@ -12,22 +12,40 @@
         <i class="fa-solid fa-pen-to-square"></i>
     </x-wire-button>
 
-    <!-- Botón Eliminar (Deshabilitado con advertencia) -->
-    <x-wire-button 
-        type="button" 
-        red 
-        xs
-        onclick="Swal.fire({
-            icon: 'warning',
-            title: 'Acción no permitida',
-            text: 'No se puede eliminar usuarios en este momento.',
-            confirmButtonText: 'Entendido',
-            confirmButtonColor: '#d33'
-        })"
-    >
-        <i class="fa-solid fa-trash"></i>
-    </x-wire-button>
+    <!-- Botón Eliminar -->
+    <form action="{{ route('admin.users.destroy', $id) }}" method="POST" class="inline-block" id="delete-form-{{ $id }}">
+        @csrf
+        @method('DELETE')
+        <x-wire-button 
+            type="button" 
+            red 
+            xs
+            onclick="confirmDelete({{ $id }})"
+        >
+            <i class="fa-solid fa-trash"></i>
+        </x-wire-button>
+    </form>
 </div>
+
+<script>
+function confirmDelete(userId) {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "Esta acción no se puede revertir",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('delete-form-' + userId).submit();
+        }
+    });
+}
+</script>
 @endif
+
 
 
