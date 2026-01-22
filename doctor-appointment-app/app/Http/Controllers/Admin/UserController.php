@@ -32,6 +32,7 @@ class UserController extends Controller
             'address' => 'nullable|string|max:255',
         ]);
 
+
         User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -90,7 +91,7 @@ class UserController extends Controller
                          ->with('success', 'Usuario actualizado correctamente.');
     }
 
-    public function destroy(User $user)
+   public function destroy(User $user)
     {
         if (auth()->id() === $user->id) {
             session()->flash('swal', [
@@ -113,5 +114,5 @@ class UserController extends Controller
 
     return redirect()->route('admin.users.index')
                      ->with('success', 'Usuario eliminado correctamente.');
-}
+    } 
 }
