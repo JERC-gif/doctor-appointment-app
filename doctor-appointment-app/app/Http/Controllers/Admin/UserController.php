@@ -81,6 +81,10 @@ class UserController extends Controller
             $data['password'] = Hash::make($request->password);
         }
 
+        if ($request->filled('password')) {
+        $data['password'] = Hash::make($request->password);
+        }
+
         $user->update($data);
 
         session()->flash('swal', [
