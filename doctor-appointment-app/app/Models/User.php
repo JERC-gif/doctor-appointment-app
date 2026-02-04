@@ -10,7 +10,6 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
-
 class User extends Authenticatable
 {
     use HasApiTokens;
@@ -19,8 +18,8 @@ class User extends Authenticatable
     use HasFactory;
     use HasProfilePhoto;
     use Notifiable;
-    use HasRoles;
     use TwoFactorAuthenticatable;
+    use HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -31,7 +30,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role_id',
+        'profile_photo_path',
         'id_number',
         'phone',
         'address',
@@ -71,8 +70,9 @@ class User extends Authenticatable
         ];
     }
 
-    public function role()
+    //relacion 1:1
+    public function patient()
     {
-        return $this->belongsTo(Role::class);
+        return $this->hasOne(Patient::class);
     }
 }

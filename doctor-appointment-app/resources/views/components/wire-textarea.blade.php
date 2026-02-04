@@ -1,4 +1,4 @@
-@props(['label' => '', 'name' => '', 'placeholder' => '', 'value' => null, 'options' => []])
+@props(['label' => '', 'name' => '', 'placeholder' => '', 'value' => null, 'rows' => 3])
 
 <div class="mb-4">
     @if($label)
@@ -7,26 +7,19 @@
         </label>
     @endif
 
-    <select
+    <textarea
         id="{{ $name }}"
         name="{{ $name }}"
+        rows="{{ $rows }}"
+        placeholder="{{ $placeholder }}"
         {{ $attributes->merge([
             'class' => 'mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-900
                         focus:border-indigo-500 focus:ring-indigo-500'
         ]) }}
-    >
-        @if($placeholder)
-            <option value="">{{ $placeholder }}</option>
-        @endif
-
-        @foreach($options as $optionValue => $optionLabel)
-            <option value="{{ $optionValue }}" {{ ($value ?? old($name)) == $optionValue ? 'selected' : '' }}>
-                {{ $optionLabel }}
-            </option>
-        @endforeach
-    </select>
+    >{{ $value ?? old($name) }}</textarea>
 
     @error($name)
         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
     @enderror
 </div>
+
