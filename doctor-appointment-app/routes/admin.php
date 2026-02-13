@@ -18,4 +18,6 @@ Route::resource('roles', RoleController::class);
 Route::resource('users', UserController::class);
 
 // Gestión de Pacientes 👇
-Route::resource('patients',\App\Http\Controllers\Admin\PatientController::class);
+// Solo permite: index, show, edit, update, destroy
+// Los pacientes se crean desde el módulo de Usuarios con rol "Paciente"
+Route::resource('patients', PatientController::class)->except(['create', 'store']);

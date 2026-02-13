@@ -12,7 +12,7 @@
         name="{{ $name }}"
         {{ $attributes->merge([
             'class' => 'mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-900
-                        focus:border-indigo-500 focus:ring-indigo-500'
+                        focus:border-indigo-500 focus:ring-indigo-500 ' . ($errors->has($name) ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : '')
         ]) }}
     >
         @if($placeholder)

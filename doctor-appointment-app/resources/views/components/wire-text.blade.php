@@ -1,4 +1,4 @@
-@props(['label' => '', 'name' => '', 'type' => 'text', 'placeholder' => '', 'value' => null])
+@props(['label' => '', 'name' => '', 'placeholder' => '', 'value' => null])
 
 <div class="mb-4">
     @if($label)
@@ -10,7 +10,7 @@
     <input
         id="{{ $name }}"
         name="{{ $name }}"
-        type="{{ $type }}"
+        type="text"
         placeholder="{{ $placeholder }}"
         value="{{ $value ?? old($name) }}"
         {{ $attributes->merge([

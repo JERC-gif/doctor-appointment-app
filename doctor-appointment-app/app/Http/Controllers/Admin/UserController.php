@@ -7,6 +7,8 @@ use App\Models\Patient;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Auth;
+
 
 class UserController extends Controller
 {
@@ -96,8 +98,12 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('admin.users.edit', compact('user'));
+        $roles = Role::all();
+
+        return view('admin.users.edit', compact('user', 'roles'));
     }
+
+
 
     /**
      * Update the specified resource in storage.
@@ -112,13 +118,10 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        // Prevenir que el usuario se elimine a sí mismo
-        if (auth()->id() === $user->id) {
+        if (Auth::id() === $user->id) {
             abort(403, 'No puedes eliminarte a ti mismo.');
         }
-
         $user->delete();
-
         return redirect()->route('admin.users.index')
             ->with('swal', [
                 'title' => 'Usuario eliminado',
