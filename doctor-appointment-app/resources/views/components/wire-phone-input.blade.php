@@ -15,7 +15,7 @@
         value="{{ $value ?? old($name) }}"
         placeholder="{{ $placeholder }}"
         x-data
-        x-mask:dynamic="$input.replace(/\D/g, '').length <= 10 ? '(999) 999-9999' : '(999) 999-9999'"
+        x-mask="{{ $mask }}"
         {{ $attributes->merge([
             'class' => 'w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm ' . ($errors->has($name) ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : '')
         ]) }}

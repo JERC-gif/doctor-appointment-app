@@ -19,11 +19,15 @@
             <option value="">{{ $placeholder }}</option>
         @endif
 
-        @foreach($options as $optionValue => $optionLabel)
-            <option value="{{ $optionValue }}" {{ ($value ?? old($name)) == $optionValue ? 'selected' : '' }}>
-                {{ $optionLabel }}
-            </option>
-        @endforeach
+        @if(count($options) > 0)
+            @foreach($options as $optionValue => $optionLabel)
+                <option value="{{ $optionValue }}" {{ ($value ?? old($name)) == $optionValue ? 'selected' : '' }}>
+                    {{ $optionLabel }}
+                </option>
+            @endforeach
+        @else
+            {{ $slot }}
+        @endif
     </select>
 
     @error($name)

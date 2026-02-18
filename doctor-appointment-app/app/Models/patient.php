@@ -16,9 +16,9 @@ class Patient extends Model
         'date_of_birth',
         'gender',
         'allergies',
-        'chronic_diseases', // Nombre real en la base de datos
-        'surgery_history', // Nombre real en la base de datos
-        'family_history', // Columna adicional en la base de datos
+        'chronic_diseases',
+        'surgery_history',
+        'family_history',
         'observations',
         'emergency_contact_name',
         'emergency_contact_phone',
@@ -28,6 +28,22 @@ class Patient extends Model
     protected $casts = [
         'date_of_birth' => 'date',
     ];
+
+    /**
+     * Alias para la vista: formulario usa "chronic_conditions", BD tiene "chronic_diseases".
+     */
+    public function getChronicConditionsAttribute(): ?string
+    {
+        return $this->attributes['chronic_diseases'] ?? null;
+    }
+
+    /**
+     * Alias para la vista: formulario usa "surgical_history", BD tiene "surgery_history".
+     */
+    public function getSurgicalHistoryAttribute(): ?string
+    {
+        return $this->attributes['surgery_history'] ?? null;
+    }
 
     /**
      * Obtener el usuario asociado al paciente.
