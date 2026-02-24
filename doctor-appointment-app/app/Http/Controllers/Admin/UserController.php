@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -25,7 +26,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles = Role::pluck('name', 'name')->toArray();
+        // Carga todos los roles como objetos para acceder a ->id y ->name en la vista
+        $roles = Role::all();
         return view('admin.users.create', compact('roles'));
     }
 
@@ -58,8 +60,8 @@ class UserController extends Controller
         // Asignar el rol al usuario
         $user->assignRole($validated['role']);
 
-        // Si el rol es Paciente, crear registro en la tabla patients (relación 1:1)
-        if ($validated['role'] === 'Paciente') {
+        // Si el rol es 'paciente', crear perfil en patients y redirigir al índice de pacientes
+        if ($validated['role'] === 'paciente') {
             Patient::create([
                 'user_id' => $user->id,
                 'date_of_birth' => now()->subYears(18)->format('Y-m-d'),
@@ -76,7 +78,19 @@ class UserController extends Controller
                 ]);
         }
 
-        // Redirigir con mensaje de éxito
+        // Si el rol es 'doctor', crear perfil vacío en doctors y redirigir al edit para completar datos médicos
+        if ($validated['role'] === 'doctor') {
+            $doctor = Doctor::create(['user_id' => $user->id]);
+
+            return redirect()->route('admin.doctors.edit', $doctor) //Index o Edit
+                ->with('swal', [
+                    'title' => 'Doctor creado',
+                    'text' => 'Complete la información médica del doctor.',
+                    'icon' => 'success',
+                ]);
+        }
+
+        // Cualquier otro rol: redirigir al listado de usuarios
         return redirect()->route('admin.users.index')
             ->with('swal', [
                 'title' => 'Usuario creado',

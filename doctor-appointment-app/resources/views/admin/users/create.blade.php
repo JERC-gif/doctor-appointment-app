@@ -73,24 +73,25 @@
             value="{{ old('address') }}"
         ></x-wire-input>
 
+        {{-- El campo se llama 'role' y envía el nombre del rol, que es lo que store() valida y assignRole() espera --}}
         <div class="mb-4">
-            <label for="role_id" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+            <label for="role" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                 Rol
             </label>
             <select
-                id="role_id"
-                name="role_id"
+                id="role"
+                name="role"
                 class="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-900
-                       focus:border-indigo-500 focus:ring-indigo-500 @error('role_id') border-red-500 @enderror"
+                       focus:border-indigo-500 focus:ring-indigo-500 @error('role') border-red-500 @enderror"
             >
                 <option value="">Sin rol</option>
                 @foreach($roles as $role)
-                    <option value="{{ $role->id }}" {{ old('role_id') == $role->id ? 'selected' : '' }}>
+                    <option value="{{ $role->name }}" {{ old('role') == $role->name ? 'selected' : '' }}>
                         {{ $role->name }}
                     </option>
                 @endforeach
             </select>
-            @error('role_id')
+            @error('role')
                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
             @enderror
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Define los permisos y accesos del usuario</p>

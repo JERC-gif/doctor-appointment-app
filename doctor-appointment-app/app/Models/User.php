@@ -70,9 +70,15 @@ class User extends Authenticatable
         ];
     }
 
-    //relacion 1:1
+    // Relación 1:1 con el perfil de paciente
     public function patient()
     {
         return $this->hasOne(Patient::class);
+    }
+
+    // Relación 1:1 con el perfil de doctor
+    public function doctor()
+    {
+        return $this->hasOne(Doctor::class);
     }
 }

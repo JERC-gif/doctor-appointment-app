@@ -8,17 +8,15 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // Ejecutar seeders en orden
+        // El orden importa: roles y usuarios primero, luego datos dependientes
         $this->call([
             RoleSeeder::class,
             UserSeeder::class,
             BloodTypeSeeder::class,
             PatientSeeder::class,
+            SpecialitySeeder::class,
         ]);
     }
 };
