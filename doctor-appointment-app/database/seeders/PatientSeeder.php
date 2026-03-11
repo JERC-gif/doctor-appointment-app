@@ -21,7 +21,7 @@ class PatientSeeder extends Seeder
         for ($i = 0; $i < 10; $i++) {
             // Crear usuario con rol de Paciente
             $user = User::factory()->create();
-            $user->assignRole('Paciente');
+            $user->assignRole('paciente');
 
             // Crear registro de paciente vinculado al usuario
             Patient::factory()->create([

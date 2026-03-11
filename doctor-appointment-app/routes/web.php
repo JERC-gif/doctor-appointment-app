@@ -2,7 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/admin'); // Redirige al admin por defecto
+// Redirige la raíz al panel de administración
+Route::redirect('/', '/admin');
+
+// Las rutas del panel admin (dashboard, roles, usuarios, pacientes, doctores, tickets de soporte, etc.)
+// están definidas en routes/admin.php y se cargan con prefijo 'admin' desde bootstrap/app.php
 
 Route::middleware([
     'auth:sanctum',

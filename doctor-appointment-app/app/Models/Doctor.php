@@ -26,4 +26,16 @@ class Doctor extends Model
     {
         return $this->belongsTo(Speciality::class);
     }
+
+    /** Bloques de disponibilidad (15 min) por día de la semana */
+    public function availability()
+    {
+        return $this->hasMany(DoctorAvailability::class, 'doctor_id');
+    }
+
+    /** Citas del doctor */
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class, 'doctor_id');
+    }
 }

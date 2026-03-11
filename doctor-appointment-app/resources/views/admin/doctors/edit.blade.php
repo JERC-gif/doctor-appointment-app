@@ -34,6 +34,11 @@
                     <x-wire-button outline href="{{ route('admin.doctors.index') }}">
                         Volver
                     </x-wire-button>
+                    <a href="{{ route('admin.doctors.schedule', $doctor) }}">
+                        <x-wire-button type="button" outline>
+                            <i class="fa-solid fa-clock mr-2"></i> Horarios
+                        </x-wire-button>
+                    </a>
                     <x-wire-button type="submit">
                         <i class="fa-solid fa-check mr-2"></i> Guardar cambios
                     </x-wire-button>

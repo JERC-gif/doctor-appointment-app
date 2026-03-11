@@ -90,4 +90,20 @@ class PatientController extends Controller
                 'text'  => 'El expediente médico ha sido actualizado exitosamente.',
             ]);
     }
+
+    /**
+     * Elimina el registro del paciente (expediente). El usuario asociado se mantiene.
+     */
+    public function destroy(Patient $patient)
+    {
+        $patient->delete();
+
+        session()->flash('swal', [
+            'icon'  => 'success',
+            'title' => 'Paciente eliminado',
+            'text'  => 'El expediente del paciente ha sido eliminado correctamente.',
+        ]);
+
+        return redirect()->route('admin.patients.index');
+    }
 }

@@ -81,4 +81,10 @@ class User extends Authenticatable
     {
         return $this->hasOne(Doctor::class);
     }
+
+    /** Tickets de soporte creados por el usuario */
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
+    }
 }
