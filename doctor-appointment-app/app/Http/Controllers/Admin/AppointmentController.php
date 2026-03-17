@@ -31,16 +31,32 @@ class AppointmentController extends Controller
         $specialities = Speciality::all();
         $date = $request->get('date');
         $specialityId = $request->get('speciality_id') ? (int) $request->get('speciality_id') : null;
+        $timeRange = $request->get('time_range'); // formato esperado: "HH:MM-HH:MM"
         $slots = collect();
 
         $patients = Patient::with('user')->orderBy('id')->get();
         if ($date) {
             $slots = $this->availabilityService->getAvailableSlots($date, $specialityId);
+
+            // Filtrar por rango horario si se envió (opcional)
+            if ($timeRange) {
+                [$from, $to] = array_pad(explode('-', $timeRange, 2), 2, null);
+                $from = $from ? trim($from) : null;
+                $to = $to ? trim($to) : null;
+
+                if ($from && $to) {
+                    $slots = $slots->filter(function ($slot) use ($from, $to) {
+                        $start = $slot['start_time'];
+                        $startStr = is_string($start) ? substr($start, 0, 5) : $start->format('H:i');
+                        return $startStr >= $from && $startStr < $to;
+                    })->values();
+                }
+            }
         } else {
             $slots = collect();
         }
 
-        return view('admin.appointments.create', compact('specialities', 'date', 'specialityId', 'slots', 'patients'));
+        return view('admin.appointments.create', compact('specialities', 'date', 'specialityId', 'slots', 'patients', 'timeRange'));
     }
 
     /**

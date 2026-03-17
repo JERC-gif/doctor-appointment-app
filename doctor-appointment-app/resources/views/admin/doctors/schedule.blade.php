@@ -61,9 +61,26 @@
                 <table class="min-w-full border border-gray-200 rounded-lg schedule-grid">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b sticky left-0 bg-gray-50 z-10 min-w-[100px]">Día / Hora</th>
+                            <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase border-b sticky left-0 bg-gray-50 z-10 min-w-[120px]">Día / Hora</th>
                             @foreach ($days as $num => $name)
-                                <th class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase border-b whitespace-nowrap min-w-[90px]">{{ $name }}</th>
+                                <th class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase border-b whitespace-nowrap min-w-[110px]">
+                                    <div class="flex flex-col items-center gap-1">
+                                        <span>{{ $name }}</span>
+                                        @php
+                                            $totalSlotsPerDay = count($blocks);
+                                            $selectedSlotsPerDay = isset($saved[$num]) ? count($saved[$num]) : 0;
+                                            $dayAllChecked = $totalSlotsPerDay > 0 && $selectedSlotsPerDay === $totalSlotsPerDay;
+                                        @endphp
+                                        <label class="flex items-center gap-1 text-[11px] text-gray-500 cursor-pointer">
+                                            <input type="checkbox"
+                                                   class="day-all rounded border-gray-400 text-indigo-600 focus:ring-indigo-500"
+                                                   data-day="{{ $num }}"
+                                                   @checked($dayAllChecked)
+                                            >
+                                            <span>Todo el día</span>
+                                        </label>
+                                    </div>
+                                </th>
                             @endforeach
                         </tr>
                     </thead>
@@ -75,7 +92,7 @@
                                     <span class="whitespace-nowrap">{{ $hourLabel }}</span>
                                 </td>
                                 @foreach ($days as $dayNum => $dayName)
-                                    <td class="px-2 py-2 align-top cell-day">
+                                    <td class="px-2 py-2 align-top cell-day" data-day="{{ $dayNum }}">
                                         <label class="flex items-center gap-1.5 mb-2 cursor-pointer text-xs text-gray-600 hover:text-gray-900">
                                             <input type="checkbox" class="hour-all rounded border-gray-400 text-indigo-600 focus:ring-indigo-500"
                                                 @checked(count(array_intersect($hourBlock, array_keys($saved[$dayNum] ?? []))) === 4)
@@ -113,6 +130,25 @@
             var form = document.getElementById('form-schedule');
             if (!form) return;
 
+            // "Todo el día" en el encabezado: marcar/desmarcar todos los slots de ese día
+            form.querySelectorAll('.day-all').forEach(function(cb) {
+                cb.addEventListener('change', function() {
+                    var day = this.getAttribute('data-day');
+                    var dayCells = form.querySelectorAll('td.cell-day[data-day=\"' + day + '\"]');
+                    dayCells.forEach(function(cell) {
+                        cell.querySelectorAll('.slot-check').forEach(function(s) {
+                            s.checked = cb.checked;
+                            s.closest('.schedule-slot').classList.toggle('slot-checked', s.checked);
+                        });
+                        // Actualizar el checkbox \"Todos\" de cada celda de hora
+                        var hourAll = cell.querySelector('.hour-all');
+                        if (hourAll) {
+                            hourAll.checked = cb.checked;
+                        }
+                    });
+                });
+            });
+
             // "Todos" en una celda: marcar/desmarcar los 4 bloques de esa hora
             form.querySelectorAll('.hour-all').forEach(function(cb) {
                 cb.addEventListener('change', function() {
@@ -121,10 +157,21 @@
                         s.checked = cb.checked;
                         s.closest('.schedule-slot').classList.toggle('slot-checked', s.checked);
                     });
+
+                    // Actualizar el checkbox de \"Todo el día\" correspondiente
+                    var day = cell.getAttribute('data-day');
+                    if (day !== null) {
+                        var daySlots = form.querySelectorAll('td.cell-day[data-day=\"' + day + '\"] .slot-check');
+                        var dayAll = form.querySelector('.day-all[data-day=\"' + day + '\"]');
+                        if (dayAll) {
+                            var allChecked = Array.from(daySlots).every(function(e) { return e.checked; });
+                            dayAll.checked = allChecked;
+                        }
+                    }
                 });
             });
 
-            // Al marcar/desmarcar un slot, actualizar estilo y el "Todos" de la celda
+            // Al marcar/desmarcar un slot, actualizar estilo, el \"Todos\" de la celda y el \"Todo el día\"
             form.querySelectorAll('.slot-check').forEach(function(s) {
                 s.addEventListener('change', function() {
                     this.closest('.schedule-slot').classList.toggle('slot-checked', this.checked);
@@ -133,6 +180,17 @@
                     var hourAll = cell.querySelector('.hour-all');
                     if (hourAll) {
                         hourAll.checked = all.length === Array.from(all).filter(function(e) { return e.checked; }).length;
+                    }
+
+                    // Actualizar el checkbox \"Todo el día\" para ese día
+                    var day = cell.getAttribute('data-day');
+                    if (day !== null) {
+                        var daySlots = form.querySelectorAll('td.cell-day[data-day=\"' + day + '\"] .slot-check');
+                        var dayAll = form.querySelector('.day-all[data-day=\"' + day + '\"]');
+                        if (dayAll) {
+                            var allChecked = Array.from(daySlots).every(function(e) { return e.checked; });
+                            dayAll.checked = allChecked;
+                        }
                     }
                 });
             });

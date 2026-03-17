@@ -140,16 +140,46 @@
                     <h3 class="text-lg font-bold text-gray-900">Consultas Anteriores</h3>
                     <button type="button" data-modal-hide="modal-consultas-anteriores" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-times text-xl"></i></button>
                 </div>
-                <div class="p-6 overflow-y-auto flex-1">
+                <div class="p-6 overflow-y-auto flex-1 bg-gray-50">
                     @forelse($previousConsultations as $prev)
                         @php $apt = $prev->appointment; @endphp
-                        <div class="border border-gray-200 rounded-lg p-4 mb-4">
-                            <p class="text-sm font-medium text-gray-900">{{ $apt->appointment_date->format('d/m/Y') }} a las {{ is_string($apt->start_time) ? substr($apt->start_time, 0, 5) : $apt->start_time->format('H:i') }}</p>
-                            <p class="text-xs text-gray-500">Atendido por: {{ $apt->doctor->user->name }}</p>
-                            <p class="text-sm text-gray-700 mt-2"><strong>Diagnóstico:</strong> {{ Str::limit($prev->diagnosis ?? '—', 80) }}</p>
-                            @if($prev->treatment)<p class="text-sm text-gray-600 mt-1"><strong>Tratamiento:</strong> {{ Str::limit($prev->treatment, 100) }}</p>@endif
-                            @if($prev->notes)<p class="text-sm text-gray-600 mt-1"><strong>Notas:</strong> {{ Str::limit($prev->notes, 80) }}</p>@endif
-                            <a href="{{ route('admin.consultations.show', $apt) }}" class="inline-block mt-3 text-indigo-600 hover:text-indigo-800 font-medium text-sm">Consultar Detalle</a>
+                        <div class="bg-white border border-gray-200 rounded-xl p-4 mb-4 shadow-sm flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                            <div>
+                                <p class="text-sm font-semibold text-gray-900">
+                                    {{ $apt->appointment_date->translatedFormat('d/m/Y') }}
+                                    <span class="text-gray-500">a las</span>
+                                    {{ is_string($apt->start_time) ? substr($apt->start_time, 0, 5) : $apt->start_time->format('H:i') }}
+                                </p>
+                                <p class="text-xs text-gray-500 mt-0.5">
+                                    Atendido por: <span class="font-medium">{{ $apt->doctor->user->name }}</span>
+                                </p>
+
+                                <div class="mt-3 space-y-1.5 text-sm">
+                                    <p class="text-gray-700">
+                                        <span class="font-semibold">Diagnóstico:</span>
+                                        <span class="ml-1">{{ Str::limit($prev->diagnosis ?? '—', 120) }}</span>
+                                    </p>
+                                    @if($prev->treatment)
+                                        <p class="text-gray-700">
+                                            <span class="font-semibold">Tratamiento:</span>
+                                            <span class="ml-1">{{ Str::limit($prev->treatment, 140) }}</span>
+                                        </p>
+                                    @endif
+                                    @if($prev->notes)
+                                        <p class="text-gray-600 text-xs">
+                                            <span class="font-semibold">Notas:</span>
+                                            <span class="ml-1">{{ Str::limit($prev->notes, 140) }}</span>
+                                        </p>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="flex md:flex-col items-center md:items-end gap-2 shrink-0">
+                                <a href="{{ route('admin.consultations.show', $apt) }}"
+                                   class="inline-flex items-center px-3 py-1.5 rounded-lg border border-indigo-500 text-indigo-600 text-xs font-semibold hover:bg-indigo-50">
+                                    Consultar detalle
+                                </a>
+                            </div>
                         </div>
                     @empty
                         <p class="text-gray-500 text-sm">No hay consultas anteriores para este paciente.</p>
