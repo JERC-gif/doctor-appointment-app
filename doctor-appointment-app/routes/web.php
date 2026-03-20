@@ -2,8 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 
-// Redirige la raíz al panel de administración
-Route::redirect('/', '/admin');
+Route::get('/', function () {
+    return response()->json(['ok' => true]);
+});
+
+Route::get('/dashboard', function () {
+    return response()->json(['message' => 'dashboard']);
+})->name('dashboard');
 
 // Las rutas del panel admin (dashboard, roles, usuarios, pacientes, doctores, tickets de soporte, etc.)
 // están definidas en routes/admin.php y se cargan con prefijo 'admin' desde bootstrap/app.php

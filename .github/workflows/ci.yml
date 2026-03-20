@@ -1,0 +1,48 @@
+name: Laravel CI
+
+on:
+  push:
+    branches: [ feature/whatsapp-notifications ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP 8.4
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          extensions: mbstring, bcmath, sqlite
+
+      - name: Debug PHP version
+        run: php -v
+
+      - name: Install dependencies
+        run: cd doctor-appointment-app && composer install --no-interaction --prefer-dist
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install NPM dependencies
+        run: cd doctor-appointment-app && npm install
+
+      - name: Build assets
+        run: cd doctor-appointment-app && npm run build
+
+      - name: Laravel setup
+        run: |
+          cd doctor-appointment-app
+          cp .env.example .env
+          php artisan key:generate
+          php artisan migrate --force
+
+      - name: Run tests
+        run: cd doctor-appointment-app && php artisan test

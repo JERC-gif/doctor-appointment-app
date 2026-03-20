@@ -124,7 +124,10 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'password' => 'nullable|min:8|confirmed',
+        ]);
     }
 
     /**
