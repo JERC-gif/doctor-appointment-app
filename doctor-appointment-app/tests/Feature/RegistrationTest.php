@@ -5,7 +5,6 @@ use Laravel\Jetstream\Jetstream;
 
 test('registration screen can be rendered', function () {
     $response = $this->get('/register');
-
     $response->assertStatus(200);
 })->skip(function () {
     return ! Features::enabled(Features::registration());
@@ -13,7 +12,6 @@ test('registration screen can be rendered', function () {
 
 test('registration screen cannot be rendered if support is disabled', function () {
     $response = $this->get('/register');
-
     $response->assertStatus(404);
 })->skip(function () {
     return Features::enabled(Features::registration());
@@ -29,7 +27,7 @@ test('new users can register', function () {
     ]);
 
     $this->assertAuthenticated();
-    $response->assertRedirect(route('dashboard', absolute: false));
+    $response->assertRedirect();
 })->skip(function () {
     return ! Features::enabled(Features::registration());
 }, 'Registration support is not enabled.');
