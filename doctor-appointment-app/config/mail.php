@@ -17,6 +17,11 @@ return [
     'default' => env('MAIL_MAILER', 'log'),
 
     /*
+    | Pausa opcional entre envíos SMTP consecutivos (Mailtrap free). Ver App\Support\SmtpSendThrottle.
+    */
+    'send_delay_ms_between_smtp_messages' => (int) env('MAIL_SEND_DELAY_MS', 0),
+
+    /*
     |--------------------------------------------------------------------------
     | Mailer Configurations
     |--------------------------------------------------------------------------
@@ -47,6 +52,16 @@ return [
             'password' => env('MAIL_PASSWORD'),
             'timeout' => null,
             'local_domain' => env('MAIL_EHLO_DOMAIN', parse_url((string) env('APP_URL', 'http://localhost'), PHP_URL_HOST)),
+        ],
+
+        'gmail' => [
+            'transport' => 'smtp',
+            'host' => env('GMAIL_HOST', 'smtp.gmail.com'),
+            'port' => env('GMAIL_PORT', 587),
+            'encryption' => null,
+            'username' => env('GMAIL_USERNAME'),
+            'password' => env('GMAIL_PASSWORD'),
+            'timeout' => null,
         ],
 
         'ses' => [

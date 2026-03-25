@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,6 +12,7 @@ class DatabaseSeeder extends Seeder
         // El orden importa: roles y usuarios primero, luego datos dependientes
         $this->call([
             RoleSeeder::class,
+            AdminSeeder::class,
             UserSeeder::class,
             BloodTypeSeeder::class,
             PatientSeeder::class,
@@ -20,4 +20,4 @@ class DatabaseSeeder extends Seeder
             DoctorSeeder::class,
         ]);
     }
-};
+}
