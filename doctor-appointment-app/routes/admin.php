@@ -32,6 +32,8 @@ Route::get('doctors/{doctor}/schedule', [DoctorController::class, 'schedule'])->
 Route::post('doctors/{doctor}/schedule', [DoctorController::class, 'saveSchedule'])->name('doctors.schedule.update');
 
 // Gestión de Citas médicas — búsqueda de disponibilidad con resolución de conflictos
+Route::post('appointments/send-daily-report', [AppointmentController::class, 'sendDailyReport'])
+    ->name('appointments.send-daily-report');
 Route::resource('appointments', AppointmentController::class);
 
 // Datos de la consulta y receta por cita

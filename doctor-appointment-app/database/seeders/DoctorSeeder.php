@@ -17,40 +17,40 @@ class DoctorSeeder extends Seeder
             return;
         }
 
-        $names = [
-            'Dr. Carlos Pérez',
-            'Dra. María González',
-            'Dr. Luis Torres',
-            'Dra. Ana Martínez',
-            'Dr. Roberto Sánchez',
-            'Dra. Laura Ramírez',
+        $doctors = [
+            ['name' => 'Dr. Jose delgado', 'email' => 'doctor.jose.delgado@medimatch.com'],
+            ['name' => 'Dra. Nico Hernández', 'email' => 'doctor.nico@medimatch.com'],
+            ['name' => 'Dr. Kevin duran', 'email' => 'doctor.kevin.duran@medimatch.com'],
+            ['name' => 'Dr. Karlos Vega', 'email' => 'doctor.karlos@medimatch.com'],
+            ['name' => 'Dra. Laura Martínez', 'email' => 'doctor.laura@medimatch.com'],
+            ['name' => 'Dr. Luisito Ríos', 'email' => 'doctor.luisito@medimatch.com'],
         ];
 
-        foreach ($names as $index => $name) {
-            $email = 'doctor' . ($index + 1) . '@medimatch.com';
+        $specList = $specialities->values();
 
+        foreach ($doctors as $index => $row) {
             $user = User::firstOrCreate(
-                ['email' => $email],
+                ['email' => $row['email']],
                 [
-                    'name'     => $name,
-                    'password' => Hash::make('12345678'),
-                    'id_number' => 'DOC-' . str_pad($index + 1, 4, '0', STR_PAD_LEFT),
-                    'phone'    => '999' . str_pad($index + 1, 7, '0', STR_PAD_LEFT),
-                    'address'  => 'Consultorio ' . ($index + 1),
+                    'name' => $row['name'],
+                    'password' => Hash::make('password'),
+                    'id_number' => 300_000_001 + $index,
+                    'phone' => '557'.str_pad((string) ($index + 1), 7, '0', STR_PAD_LEFT),
+                    'address' => 'Consultorio '.($index + 1).', Mérida',
                 ]
             );
-
-            $user->assignRole('doctor');
+            if (! $user->hasRole('doctor')) {
+                $user->assignRole('doctor');
+            }
 
             Doctor::firstOrCreate(
                 ['user_id' => $user->id],
                 [
-                    'speciality_id' => $specialities->random()->id,
-                    'medical_license_number' => 'LIC-' . str_pad($index + 1, 6, '0', STR_PAD_LEFT),
-                    'biography' => 'Médico especialista con amplia experiencia clínica.',
+                    'speciality_id' => $specList[$index % $specList->count()]->id,
+                    'medical_license_number' => 'LIC-'.str_pad((string) ($index + 1), 6, '0', STR_PAD_LEFT),
+                    'biography' => 'Médico de ejemplo MediMatch.',
                 ]
             );
         }
     }
 }
-
